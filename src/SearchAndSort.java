@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class SearchAndSort {
@@ -84,10 +87,42 @@ public class SearchAndSort {
 			}
 
 			// get data
+            Object[] data;
 			while (true) {
 				System.out.print("Enter the Data. ");
-				String
+				String unparsed = in.nextLine();
+				if (useStrings) {
+					String[] parsed = unparsed.split(",");
+					data = parsed;
+				}
+				else {
+					Integer[] parsed = new Integer[unparsed.split(",").length];
+					int i = 0;
+					try {
+						for (String element : unparsed.split(",")) {
+							parsed[i++] = Integer.parseInt(element);
+						}
+					} catch (NumberFormatException E) {
+						continue;
+					}
+					data = parsed;
+				}
+				break;
+			}
+
+			switch (userSort) {
+				case selection:
+					selection(data);
+				case insertion:
+					insertion(data);
+				case merge:
+					merge(data);
+				case linear:
+					linear(data);
+				case binary:
+					binary(data, target);
 			}
 		}
 	}
+
 }
