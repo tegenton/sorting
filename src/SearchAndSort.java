@@ -87,7 +87,7 @@ public class SearchAndSort {
 			}
 
 			// get data
-            Object[] data;
+            Comparable[] data;
 			while (true) {
 				System.out.print("Enter the Data. ");
 				String unparsed = in.nextLine();
@@ -110,9 +110,29 @@ public class SearchAndSort {
 				break;
 			}
 
-			switch (userSort) {
+			ArrayList<Comparable> dataList = new ArrayList<>();
+			if (useLists) {
+				dataList = (ArrayList<Comparable>) Arrays.asList(data);
+				switch (userSort) {
+				case bubble:
+					bubble(dataList);
 				case selection:
-					selection(data);
+					selection( dataList);
+				case insertion:
+					insertion(dataList);
+				case merge:
+					merge(dataList);
+				case linear:
+					linear(dataList);
+				case binary:
+					binary(dataList, target);
+			}
+			}
+			switch (userSort) {
+				case bubble:
+					bubble(data);
+				case selection:
+					selection( data);
 				case insertion:
 					insertion(data);
 				case merge:
@@ -123,6 +143,12 @@ public class SearchAndSort {
 					binary(data, target);
 			}
 		}
+	}
+	public static <E extends Comparable<E>> E bubble(E[] list) {
+
+	}
+	public static <E extends Comparable<E>> ArrayList<E> bubble(ArrayList<E> list) {
+
 	}
 
 }
