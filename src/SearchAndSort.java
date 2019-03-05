@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class SearchAndSort {
@@ -84,10 +87,68 @@ public class SearchAndSort {
 			}
 
 			// get data
+            Comparable[] data;
 			while (true) {
 				System.out.print("Enter the Data. ");
-				String
+				String unparsed = in.nextLine();
+				if (useStrings) {
+					String[] parsed = unparsed.split(",");
+					data = parsed;
+				}
+				else {
+					Integer[] parsed = new Integer[unparsed.split(",").length];
+					int i = 0;
+					try {
+						for (String element : unparsed.split(",")) {
+							parsed[i++] = Integer.parseInt(element);
+						}
+					} catch (NumberFormatException E) {
+						continue;
+					}
+					data = parsed;
+				}
+				break;
+			}
+
+			ArrayList<Comparable> dataList = new ArrayList<>();
+			if (useLists) {
+				dataList = (ArrayList<Comparable>) Arrays.asList(data);
+				switch (userSort) {
+				case bubble:
+					bubble(dataList);
+				case selection:
+					selection( dataList);
+				case insertion:
+					insertion(dataList);
+				case merge:
+					merge(dataList);
+				case linear:
+					linear(dataList);
+				case binary:
+					binary(dataList, target);
+			}
+			}
+			switch (userSort) {
+				case bubble:
+					bubble(data);
+				case selection:
+					selection( data);
+				case insertion:
+					insertion(data);
+				case merge:
+					merge(data);
+				case linear:
+					linear(data);
+				case binary:
+					binary(data, target);
 			}
 		}
 	}
+	public static <E extends Comparable<E>> E bubble(E[] list) {
+
+	}
+	public static <E extends Comparable<E>> ArrayList<E> bubble(ArrayList<E> list) {
+
+	}
+
 }
