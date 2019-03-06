@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class SearchAndSort {
@@ -110,45 +109,194 @@ public class SearchAndSort {
 				break;
 			}
 
+			Comparable target;
+			if (userSort == SortTypes.linear || userSort == SortTypes.binary) {
+				while (true) {
+					System.out.print("What is your target?");
+					if (useStrings) {
+						target = in.nextLine();
+					} else {
+						try {
+							target = Integer.parseInt(in.nextLine());
+						} catch (Exception e) {
+							continue;
+						}
+					}
+				}
+			}
+
+			System.out.print(userSort.toString() + ": ");
+
+			int index;
+
 			ArrayList<Comparable> dataList = new ArrayList<>();
 			if (useLists) {
-				dataList = (ArrayList<Comparable>) Arrays.asList(data);
+				dataList = new ArrayList<>(Arrays.asList(data));
 				switch (userSort) {
 				case bubble:
-					bubble(dataList);
+					dataList = bubble(dataList);
+					break;
 				case selection:
-					selection( dataList);
+					dataList = selection(dataList);
+					break;
 				case insertion:
-					insertion(dataList);
+					dataList = insertion(dataList);
+					break;
 				case merge:
-					merge(dataList);
+					dataList = merge(dataList);
+					break;
 				case linear:
-					linear(dataList);
+//					index = linear(dataList, target);
+//					System.out.println(index);
+					break;
 				case binary:
-					binary(dataList, target);
-			}
+//					index = binary(dataList, target);
+//					System.out.println(index);
+					break;
+				}
 			}
 			switch (userSort) {
 				case bubble:
-					bubble(data);
+					data = bubble(data);
+					break;
 				case selection:
-					selection( data);
+					data = selection(data);
+					break;
 				case insertion:
-					insertion(data);
+					data = insertion(data);
+					break;
 				case merge:
-					merge(data);
+					data = merge(data);
+					break;
 				case linear:
-					linear(data);
+//					index = linear(data, target);
+//					System.out.println(index);
+					break;
 				case binary:
-					binary(data, target);
+//					index = binary(data, target);
+//					System.out.println(index);
+					break;
 			}
+
+			if (userSort != SortTypes.binary && userSort != SortTypes.linear) {
+				if (useLists)
+					dataList.forEach((item)->System.out.print(item + ", "));
+				else {
+					for (int i = 0; i < data.length - 1; i++) {
+						System.out.print(data[i] + ", ");
+					}
+					System.out.println(data[data.length - 1]);
+				}
+			}
+
+			System.out.println();
+
 		}
 	}
-	public static <E extends Comparable<E>> E bubble(E[] list) {
 
+	public static Comparable[] bubble(Comparable[] list) {
+		boolean swapped = false;
+		Comparable temp;
+		do {
+			swapped = false;
+			for (int i = 0; i < list.length - 1; i++) {
+				if (list[i].compareTo(list[i + 1]) > 0) {
+					temp = list[i];
+					list[i] = list[i + 1];
+					list[i + 1] = temp;
+					swapped = true;
+				}
+			}
+		} while (swapped);
+		return list;
 	}
-	public static <E extends Comparable<E>> ArrayList<E> bubble(ArrayList<E> list) {
+	public static ArrayList<Comparable> bubble(ArrayList<Comparable> list) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return new ArrayList<Comparable>(Arrays.asList(bubble(array)));
+	}
 
+	public static Comparable[] selection(Comparable[] list) {
+		Comparable temp;
+		int min;
+		for (int i = 0; i < list.length - 1; i++) {
+			min = i;
+			for (int j = i; j < list.length; j++) {
+				if (list[j].compareTo(list[min]) < 0) {
+					min = j;
+				}
+			}
+			temp = list[i];
+			list[i] = list[min];
+			list[min] = temp;
+		}
+		return list;
+	}
+	public static ArrayList<Comparable> selection(ArrayList<Comparable> list) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return new ArrayList<Comparable>(Arrays.asList(selection(array)));
+	}
+
+	public static Comparable[] insertion(Comparable[] list) {
+		Comparable temp;
+		for (int i = 1; i < list.length; i++) {
+			temp = list[i];
+			int j = i - 1;
+			while (j >= 0 && list[j].compareTo(temp) > 0) {
+				list[j + 1] = list[j--];
+			}
+			list[j + 1] = temp;
+		}
+		return list;
+	}
+
+	public static ArrayList<Comparable> insertion(ArrayList<Comparable> list) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return new ArrayList<Comparable>(Arrays.asList(insertion(array)));
+	}
+
+	public static Comparable[] merge(Comparable[] list) {
+		if (list.length == 1) {
+			return list;
+		}
+		else {
+			Comparable[] a = new Comparable[list.length/2];
+			Comparable[] b = new Comparable[list.length - a.length];
+			for (int i = 0; i < list.length; i++) {
+				if (i < a.length)
+					a[i] = list[i];
+				else
+					b[i - a.length] = list[i];
+			}
+			a = merge(a);
+			b = merge(b);
+
+			int aIndex, bIndex;
+			aIndex = bIndex = 0;
+			for (int i = 0; i < list.length; i++) {
+				if (bIndex == b.length) {
+					list[i] = a[aIndex++];
+				}
+				else if (aIndex == a.length) {
+					list[i] = b[bIndex++];
+				}
+				else if (a[aIndex].compareTo(b[bIndex]) < 0) {
+					list[i] = a[aIndex++];
+				}
+				else {
+					list[i] = b[bIndex++];
+				}
+			}
+		}
+		return list;
+	}
+
+	public static ArrayList<Comparable> merge(ArrayList<Comparable> list) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return new ArrayList<Comparable>(Arrays.asList(merge(array)));
 	}
 
 }
