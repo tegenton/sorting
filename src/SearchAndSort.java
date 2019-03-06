@@ -109,17 +109,18 @@ public class SearchAndSort {
 				break;
 			}
 
-			Comparable target;
+			Comparable target = null;
 			if (userSort == SortTypes.linear || userSort == SortTypes.binary) {
 				while (true) {
-					System.out.print("What is your target?");
+					System.out.print("What is your target? ");
 					if (useStrings) {
 						target = in.nextLine();
+						break;
 					} else {
 						try {
 							target = Integer.parseInt(in.nextLine());
+							break;
 						} catch (Exception e) {
-							continue;
 						}
 					}
 				}
@@ -146,36 +147,38 @@ public class SearchAndSort {
 					dataList = merge(dataList);
 					break;
 				case linear:
-//					index = linear(dataList, target);
-//					System.out.println(index);
+					index = linear(dataList, target);
+					System.out.println(index);
 					break;
 				case binary:
-//					index = binary(dataList, target);
-//					System.out.println(index);
+					index = binary(dataList, target);
+					System.out.println(index);
 					break;
 				}
 			}
-			switch (userSort) {
-				case bubble:
-					data = bubble(data);
-					break;
-				case selection:
-					data = selection(data);
-					break;
-				case insertion:
-					data = insertion(data);
-					break;
-				case merge:
-					data = merge(data);
-					break;
-				case linear:
-//					index = linear(data, target);
-//					System.out.println(index);
-					break;
-				case binary:
-//					index = binary(data, target);
-//					System.out.println(index);
-					break;
+			else {
+				switch (userSort) {
+					case bubble:
+						data = bubble(data);
+						break;
+					case selection:
+						data = selection(data);
+						break;
+					case insertion:
+						data = insertion(data);
+						break;
+					case merge:
+						data = merge(data);
+						break;
+					case linear:
+						index = linear(data, target);
+						System.out.println(index);
+						break;
+					case binary:
+						index = binary(data, target);
+						System.out.println(index);
+						break;
+				}
 			}
 
 			if (userSort != SortTypes.binary && userSort != SortTypes.linear) {
@@ -299,4 +302,45 @@ public class SearchAndSort {
 		return new ArrayList<Comparable>(Arrays.asList(merge(array)));
 	}
 
+	public static int linear(Comparable[] list, Comparable target) {
+		for (int i = 0; i < list.length; i++) {
+			if (target.compareTo(list[i]) == 0) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static int linear(ArrayList<Comparable> list, Comparable target) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return linear(array, target);
+	}
+
+	public static int binary(Comparable[] list, Comparable target) {
+		list = merge(list);
+		int index = -1;
+		int upper = list.length;
+		int lower = 0;
+		int m;
+		while (lower <= upper) {
+			m = (upper - lower) / 2 + lower;
+			if (list[m].compareTo(target) == 0) {
+				return m;
+			}
+			else if (list[m].compareTo(target) > 0) {
+				upper = m - 1;
+			}
+			else {
+				lower = m + 1;
+			}
+		}
+		return index;
+	}
+
+	public static int binary(ArrayList<Comparable> list, Comparable target) {
+		Comparable[] array = new Comparable[list.size()];
+		array = list.toArray(array);
+		return binary(array, target);
+	}
 }
